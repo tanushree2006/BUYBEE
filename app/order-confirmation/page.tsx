@@ -1,13 +1,11 @@
 "use client"
-
 import Link from "next/link"
-import { CheckCircle, Package, Truck, Mail, Download, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { CheckCircle, Truck, Mail, Package } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import { Button } from "react-day-picker"
 
 const orderDetails = {
   orderNumber: "BUY-2024-001234",
@@ -15,20 +13,8 @@ const orderDetails = {
   status: "Confirmed",
   estimatedDelivery: "January 20-22, 2024",
   items: [
-    {
-      id: 1,
-      name: "Wireless Bluetooth Headphones",
-      price: 79.99,
-      quantity: 2,
-      image: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      quantity: 1,
-      image: "/placeholder.svg?height=60&width=60",
-    },
+    { id: 1, name: "Wireless Bluetooth Headphones", price: 79.99, quantity: 2, image: "/placeholder.svg?height=60&width=60" },
+    { id: 2, name: "Smart Fitness Watch", price: 199.99, quantity: 1, image: "/placeholder.svg?height=60&width=60" },
   ],
   shippingAddress: {
     name: "John Doe",
@@ -47,209 +33,95 @@ const orderDetails = {
 
 export default function OrderConfirmationPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50 flex flex-col">
       <Navbar />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Success Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <CheckCircle className="h-16 w-16 text-green-500" />
-          </div>
-          <h1 className="text-3xl font-bold mb-2">Order Confirmed!</h1>
-          <p className="text-muted-foreground text-lg">
-            Thank you for your purchase. Your order has been successfully placed.
+      <main className="container max-w-4xl mx-auto py-16 px-6 space-y-10">
+        <div className="flex flex-col items-center gap-4">
+          <CheckCircle size={64} className="text-amber-600" />
+          <h1 className="text-4xl font-bold text-amber-900">Thank you for your purchase!</h1>
+          <p className="text-lg text-slate-700 max-w-xl text-center">
+            Your order has been successfully placed and is now being processed.
           </p>
+          <Badge className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-4 py-2 rounded-full text-lg">
+            Order Confirmed
+          </Badge>
         </div>
 
-        {/* Order Summary Card */}
-        <Card className="mb-8">
+        <Card className="shadow-lg bg-gradient-to-br from-white to-gray-50 rounded-xl border-0">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Order Details</CardTitle>
-              <Badge variant="secondary" className="bg-green-100 text-green-800">
-                {orderDetails.status}
-              </Badge>
-            </div>
+            <CardTitle className="text-2xl text-amber-800 font-semibold">Order Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Order Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">Order Number</p>
-                <p className="font-semibold">{orderDetails.orderNumber}</p>
+                <span className="font-semibold">Order Number:</span> {orderDetails.orderNumber}
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Order Date</p>
-                <p className="font-semibold">{orderDetails.orderDate}</p>
+                <span className="font-semibold">Order Date:</span> {orderDetails.orderDate}
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Estimated Delivery</p>
-                <p className="font-semibold">{orderDetails.estimatedDelivery}</p>
+                <span className="font-semibold">Status:</span> {orderDetails.status}
+              </div>
+              <div>
+                <span className="font-semibold">Estimated Delivery:</span> {orderDetails.estimatedDelivery}
               </div>
             </div>
 
-            <Separator />
-
-            {/* Order Items */}
             <div>
-              <h3 className="font-semibold mb-4">Items Ordered</h3>
-              <div className="space-y-3">
-                {orderDetails.items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg">
-                    <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-                      <Package className="h-6 w-6 text-muted-foreground" />
+              <h3 className="text-amber-800 font-semibold text-lg mb-2">Items Purchased</h3>
+              <div className="space-y-2">
+                {orderDetails.items.map(item => (
+                  <div key={item.id} className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <div className="flex items-center gap-3">
+                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg border" />
+                      <div>
+                        <div className="font-semibold text-slate-900">{item.name}</div>
+                        <div className="text-slate-600 text-sm">Quantity: {item.quantity}</div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
-                      <p className="text-sm text-muted-foreground">${item.price} each</p>
-                    </div>
+                    <div className="text-amber-700 font-semibold">${(item.price * item.quantity).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <Separator />
+            <div className="grid grid-cols-2 gap-6 text-slate-700">
+              <div>
+                <h3 className="font-semibold text-amber-800 mb-2">Shipping Address</h3>
+                <div>{orderDetails.shippingAddress.name}</div>
+                <div>{orderDetails.shippingAddress.address}</div>
+                <div>
+                  {orderDetails.shippingAddress.city}, {orderDetails.shippingAddress.state} {orderDetails.shippingAddress.zipCode}
+                </div>
+                <div>{orderDetails.shippingAddress.country}</div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-amber-800 mb-2">Payment Method</h3>
+                <div>Credit Card</div>
+                <div>{orderDetails.paymentMethod}</div>
+                <div className="mt-3 font-semibold text-amber-700 text-lg">Total Paid: ${orderDetails.total.toFixed(2)}</div>
+              </div>
+            </div>
 
-            {/* Order Total */}
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>${orderDetails.subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>${orderDetails.shipping.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Tax</span>
-                <span>${orderDetails.tax.toFixed(2)}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span>${orderDetails.total.toFixed(2)}</span>
-              </div>
+            <div className="text-center pt-6 text-sm text-slate-500">
+              If you have any questions about your order, please don&apos;t hesitate to contact us.
             </div>
           </CardContent>
         </Card>
 
-        {/* Shipping and Payment Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Truck className="h-5 w-5 mr-2" />
-                Shipping Address
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-1">
-                <p className="font-medium">{orderDetails.shippingAddress.name}</p>
-                <p>{orderDetails.shippingAddress.address}</p>
-                <p>
-                  {orderDetails.shippingAddress.city}, {orderDetails.shippingAddress.state}{" "}
-                  {orderDetails.shippingAddress.zipCode}
-                </p>
-                <p>{orderDetails.shippingAddress.country}</p>
-              </div>
-            </CardContent>
-          </Card>
+        import Link from "next/link"
+<div className="flex justify-center">
+  <Link href="/" legacyBehavior>
+    <a>
+      <Button className="bg-gradient-to-r from-amber-700 to-amber-900 text-white px-8 py-3 text-lg shadow-lg rounded-lg">
+        Back to Home
+      </Button>
+    </a>
+  </Link>
+</div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Mail className="h-5 w-5 mr-2" />
-                Payment Method
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="font-medium">Credit Card</p>
-              <p className="text-muted-foreground">{orderDetails.paymentMethod}</p>
-              <p className="text-sm text-green-600 mt-2">Payment Successful</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Next Steps */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>What's Next?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Mail className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="font-medium">Order Confirmation Email</p>
-                  <p className="text-sm text-muted-foreground">
-                    We've sent a confirmation email with your order details to your email address.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Package className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="font-medium">Order Processing</p>
-                  <p className="text-sm text-muted-foreground">
-                    Your order is being prepared for shipment. You'll receive tracking information once it ships.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Truck className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="font-medium">Delivery</p>
-                  <p className="text-sm text-muted-foreground">Estimated delivery: {orderDetails.estimatedDelivery}</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="outline" className="flex items-center bg-transparent">
-            <Download className="h-4 w-4 mr-2" />
-            Download Receipt
-          </Button>
-
-          <Button variant="outline">Track Your Order</Button>
-
-          <Link href="/products">
-            <Button className="flex items-center">
-              Continue Shopping
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </Link>
-        </div>
-
-        {/* Support Info */}
-        <div className="text-center mt-8 p-6 bg-muted/30 rounded-lg">
-          <h3 className="font-semibold mb-2">Need Help?</h3>
-          <p className="text-muted-foreground mb-4">
-            If you have any questions about your order, please don't hesitate to contact us.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <Button variant="outline">Contact Support</Button>
-            </Link>
-            <Button variant="outline">Live Chat</Button>
-          </div>
-        </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
